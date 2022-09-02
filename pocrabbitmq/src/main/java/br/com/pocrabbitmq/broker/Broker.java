@@ -25,7 +25,7 @@ public class Broker {
 	
 	public Broker() {
 		this.factory = new ConnectionFactory();
-		log.info("Broker inicializado!");
+		log.info("Initializing Broker!");
 	}
 
 	
@@ -36,11 +36,11 @@ public class Broker {
 		factory.setPort(PORT);
 		try {
 			conn = factory.newConnection("conexao-geral");
-			log.info("Conexão criada!");
+			log.info("Connection build!");
 		}catch(TimeoutException e) {
-			log.error("Timeout ao tentar criar conexão!" + e.getMessage());
+			log.error("Timeout trying build connection!" + e.getMessage());
 		}catch(IOException e) {
-			log.error("Erro ao tentar criar conexao! " + e.getMessage());
+			log.error("Error trying create connection! " + e.getMessage());
 		}
 		return conn;
 	}
@@ -48,9 +48,9 @@ public class Broker {
 	public Channel getChannel(){
 		try {
 			channel = getConnect().createChannel();
-			log.info("Canal Criado!");
+			log.info("Channel create!");
 		}catch(IOException e) {
-			log.error("Erro ao tentar criar canal! " + e.getMessage());
+			log.error("Error trying create channel! " + e.getMessage());
 		}
 		
 		return channel;

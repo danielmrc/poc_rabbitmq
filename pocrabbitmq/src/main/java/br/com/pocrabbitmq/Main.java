@@ -2,6 +2,7 @@ package br.com.pocrabbitmq;
 
 import br.com.pocrabbitmq.broker.Producer;
 import br.com.pocrabbitmq.broker.Consumer;
+import br.com.pocrabbitmq.broker.ConsumerHandler;
 import java.lang.InterruptedException;
 
 import org.apache.log4j.BasicConfigurator;
@@ -17,22 +18,33 @@ public class Main {
 	
 	static Producer producer;
 	
+	static ConsumerHandler consumerHandler;
+	
     public static void main(String... args) {
     	BasicConfigurator.configure();
     	try {
 	    	producer = new Producer();
 	        producer.sendMessage();
 	        
-	        log.info("Em espera...");
-	        Thread.sleep(40000);
-	        
+	        log.info("Waiting...");
+	        Thread.sleep(4000);
+	        /*
 	        consumer = new Consumer();
 	        consumer.onMessage();
-
+	    	*/
+    		
+    		consumerHandler = new ConsumerHandler("smp01");
+    		consumerHandler.initConsumer();
+    		
+    		Thread.sleep(4000);
+    		log.info("Waiting...");
+    		
+    		producer.sendMessage();
+    		
     	}catch(IOException e) {
-    		log.error("Erro ao tentar produzir mensagem!" + e.getMessage());
+    		log.error("Error" + e.getMessage());
     	}catch(InterruptedException e) {
-        	log.error("Erro no sleep da thread " + e.getMessage());
+        	log.error("Error" + e.getMessage());
         }
     }
 }

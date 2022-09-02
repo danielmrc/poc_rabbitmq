@@ -28,7 +28,7 @@ public class ConsumerHandler {
 		broker = new Broker();
 		channel = broker.getChannel();
 		consumerTag = tag;
-		log.info("ConsumerHandler inicializado");
+		log.info("initializing ConsumerHandler");
 	}
 	
 	public void initConsumer() {

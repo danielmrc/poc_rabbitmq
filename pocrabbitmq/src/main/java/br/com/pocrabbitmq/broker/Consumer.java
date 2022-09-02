@@ -25,7 +25,7 @@ public class Consumer {
 	public Consumer() throws IOException{
 		broker = new Broker();
 		channel = broker.getChannel();
-		log.info("Consumidor inicializado!");
+		log.info("Initialing Consumidor!");
 	}
 	
 	public void onMessage() {
@@ -36,13 +36,13 @@ public class Consumer {
 				byte[] msg = response.getBody();
 				String finalMsg = Arrays.toString(msg);
 				AMQP.BasicProperties props = response.getProps();
-				log.info("Mensagem lida da fila [" + QUEUENAME + "] com prioridade [" +props.getPriority()+ "] :" + finalMsg);
+				log.info("Message read in queue = [" + QUEUENAME + "] with priority = [" +props.getPriority()+ "] :" + finalMsg);
 				sendAck(response.getEnvelope().getDeliveryTag());
 			}else {
-				log.warn("Resposta vazia!");
+				log.warn("Void response!");
 			}
 		}catch(IOException e) {
-			log.error("Erro ao tentar consumir mensagem");
+			log.error("Error trying consume message");
 		}
 	}
 	
@@ -50,9 +50,9 @@ public class Consumer {
 	private void sendAck(Long deliveryTag) {
 		try {
 			channel.basicAck(deliveryTag, autoAck);
-			log.info("ACK enviado com sucesso para a mensagem de tag = [" + deliveryTag + "]");
+			log.info("ACK sending with sucess for message with tag = [" + deliveryTag + "]");
 		}catch(IOException e) {
-			log.error("Erro ao tentar enviar ACK para a mensagem de tag = [" + deliveryTag + "]");
+			log.error("Error trying sending ACK for message tag = [" + deliveryTag + "]");
 		}
 	}
 }

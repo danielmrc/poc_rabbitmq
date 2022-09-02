@@ -29,27 +29,45 @@ public class Producer {
 	public Producer() throws IOException{
 		broker = new Broker();
 		channel = broker.getChannel();
-		log.info("Consumidor inicializado!");
+		log.info("Initializing consumer!");
 	}
 	public void sendMessage() {
 		
-		byte[] msg = MESSAGETEST.getBytes();
+		//byte[] msg = MESSAGETEST.getBytes();
 		
 		try {
 			channel.exchangeDeclare(EXCHANGENAME, EXCHANGETYPE, true);
 			channel.queueDeclare(QUEUENAME, true, false, false, null);
 			channel.queueBind(QUEUENAME, EXCHANGENAME, QUEUENAME);
 			
-			channel.basicPublish(EXCHANGENAME, QUEUENAME, getProperties(), msg);
+			generateMessages();
 			log.info("Mensagem enviada com sucesso!");
 		}catch(IOException e) {
-			log.error("Erro ao tentar enviar mensagem para a fila [" + QUEUENAME + "]" + e.getMessage());
+			log.error("Error trying send message to the queue = [" + QUEUENAME + "]" + e.getMessage());
 		}
 			
 		
 	}
 	
-	private BasicProperties getProperties() {
+	
+	private void generateMessages() {
+		StringBuilder msg = new StringBuilder();
+		msg.append("message with priority =");
+		
+		for(int i = 0; i < 150; i++) {
+			msg.append(i % 10);
+			String msgStr = msg.toString();
+			try {
+				channel.basicPublish(EXCHANGENAME, QUEUENAME, getProperties(i%10), msgStr.getBytes());
+				log.info("Message send to QUEUE = [" + QUEUENAME + " msg = [" + msgStr);
+			}catch(IOException e) {
+				log.info("Error while trying send messages " + e.getMessage());
+			}
+		}
+	}
+	
+	
+	private BasicProperties getProperties(int priority) {
 		BasicProperties prop;
 		
 		prop = new AMQP.BasicProperties.Builder()
