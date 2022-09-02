@@ -1,0 +1,13 @@
+services:
+    rabbitmq:
+        image: rabbitmq:3.10.7-management
+        container_name: rabbitmq
+        restart: always
+        ports: 
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ./dados:/home/danielsq/workspace/pocRabbit/dados
+        environment:
+            - RABBITMQ_DEFAULT_USER=sisv3
+            - RABBITMQ_DEFAULT_PASS=s1sv3
